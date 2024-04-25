@@ -1,21 +1,23 @@
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import Layout from "./components/Layout"
+import './index.css'
 import About from "./pages/About"
 import Home from "./pages/Home"
-import './index.css'
+import VanDetail from "./pages/VanDetail"
+import Vans from "./pages/Vans"
+import './server'
 
 function App() {
 
   return (
     <BrowserRouter>
-      <header>
-        <Link className="site-logo" to="/">#VanLife</Link>
-        <nav>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/vans" element={<Vans />} />
+          <Route path="/vans/:id" element={<VanDetail />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

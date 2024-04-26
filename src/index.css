@@ -299,8 +299,8 @@ i[class*="van-type-"] {
     text-decoration: none;
 }
 
-.van-detail-container .back-button:visited {
-}
+/* .van-detail-container .back-button:visited {
+} */
 
 .van-detail-container .back-button span {
     text-decoration: underline;
@@ -346,6 +346,8 @@ i[class*="van-type-"] {
     display: flex;
     margin-bottom: 30px;
 }
+
+
 
 .host-nav a {
     text-decoration: none;
@@ -739,4 +741,10 @@ img.graph {
 .host-reviews .review-star {
     color: #ff8c38;
     margin-right: 5px;
+}
+
+a.active-link {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #161616;
 }

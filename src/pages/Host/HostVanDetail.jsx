@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, Outlet, NavLink } from "react-router-dom"
 
 const HostVanDetail = () => {
   const [van, setVan] = useState(null)
@@ -11,6 +11,8 @@ const HostVanDetail = () => {
       .then(data => setVan(data.vans))
   }, [id])
 
+  const activeLink = ({ isActive }) => isActive ? 'active-link' : ''
+
   if (!van) return <i>Loading...</i>
 
   return (
@@ -19,7 +21,9 @@ const HostVanDetail = () => {
         to=".."
         relative="path"
         className="back-button"
-      >&larr; <span>Back to all vans</span></Link>
+      >
+        &larr; <span>Back to all vans</span>
+      </Link>
 
       <div className="host-van-detail-layout-container">
         <div className="host-van-detail">
@@ -34,6 +38,14 @@ const HostVanDetail = () => {
             <h4>${van.price}/day</h4>
           </div>
         </div>
+
+        <nav className="host-van-detail-nav">
+          <NavLink end className={activeLink} to={'.'} >Details</NavLink>
+          <NavLink className={activeLink} to={'pricing'} >Pricing</NavLink>
+          <NavLink className={activeLink} to={'photos'} >Photos</NavLink>
+        </nav>
+
+        <Outlet context={van} />
       </div>
     </section>
   )

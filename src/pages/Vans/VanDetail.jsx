@@ -9,8 +9,6 @@ const VanDetail = () => {
   const search = state?.search || ''
   const type = state?.type || 'all'
 
-  console.log(search);
-  
   useEffect(() => {
     fetch(`/api/vans/${id}`)
       .then(res => res.json())

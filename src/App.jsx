@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound"
 import VanDetail from "./pages/Vans/VanDetail"
 import Vans, { loader as vansLoader } from "./pages/Vans/Vans"
 import './server'
+import Login from "./pages/Login"
 
 function App() {
   const router = createBrowserRouter([
@@ -25,6 +26,7 @@ function App() {
         { index: true, element: <Home /> },
         { path: 'about', element: <About /> },
         { path: 'vans', element: <Vans />, loader: vansLoader, errorElement: <Error /> },
+        { path: 'login', element: <Login /> },
         { path: 'vans/:id', element: <VanDetail /> },
         {
           path: 'host', element: <HostLayout />, children: [

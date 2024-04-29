@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
+import { Link, useLocation, useSearchParams } from "react-router-dom"
 
 const Vans = () => {
   const [vans, setVans] = useState([])
@@ -49,7 +49,7 @@ const Vans = () => {
       <div className="van-list">
         {displayedVans.map(van => (
           <div key={van.id} className="van-tile">
-            <Link to={`/vans/${van.id}`}>
+            <Link to={van.id} state={{ search: `?${searchParams.toString()}`, type: typeFilter }}>
               <img src={van.imageUrl} />
               <div className="van-info">
                 <h3>{van.name}</h3>

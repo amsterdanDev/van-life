@@ -1,33 +1,14 @@
-import { useEffect, useState } from "react"
-import { Link, useLocation, useSearchParams } from "react-router-dom"
+import { Link, useLoaderData, useSearchParams } from "react-router-dom"
 import { getVans } from "../../api"
 
 const Vans = () => {
-  const [vans, setVans] = useState([])
+  const vans = useLoaderData()
   const [searchParams, setSearchParams] = useSearchParams()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
   const typeFilter = searchParams.get('type')
 
-  const displayedVans = typeFilter 
+  const displayedVans = typeFilter
     ? vans.filter(({ type }) => type === typeFilter)
     : vans
-
-  useEffect(() => {
-    async function loadVans() {
-      setLoading(true)
-      try {
-        const data = await getVans()
-        setVans(data)
-      } catch (error) {
-        setError(error)
-      }
-
-      setLoading(false)
-    }
-
-    loadVans()
-  }, [])
 
   const toFilter = ({ target }) => {
     if (!target.value) return setSearchParams({})
@@ -35,31 +16,25 @@ const Vans = () => {
     setSearchParams({ type: target.value })
   }
 
-  if (loading) return <h1 aria-live="polite">Loading...</h1>
-
-  if (error) {
-    return <h1 aria-live="assertive">There was an error: {error.message}</h1>
-  }
-
   return (
     <div className="van-list-container">
       <h1>Explore our van options</h1>
       <div>
-        <button 
-          value={'simple'} 
-          onClick={toFilter} 
+        <button
+          value={'simple'}
+          onClick={toFilter}
           className={`van-type simple ${typeFilter === 'simple' && 'selected'}`} >
           Simple
         </button>
-        <button 
-          value={'luxury'} 
-          onClick={toFilter} 
+        <button
+          value={'luxury'}
+          onClick={toFilter}
           className={`van-type luxury ${typeFilter === 'luxury' && 'selected'}`} >
           Luxury
         </button>
-        <button 
-          value={'rugged'} 
-          onClick={toFilter} 
+        <button
+          value={'rugged'}
+          onClick={toFilter}
           className={`van-type rugged ${typeFilter === 'rugged' && 'selected'}`} >
           Rugged
         </button>
@@ -83,4 +58,9 @@ const Vans = () => {
   )
 }
 
+function loader() {
+  return getVans()
+}
+
 export default Vans
+export { loader }

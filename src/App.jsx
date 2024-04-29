@@ -1,4 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import Error from "./components/Error"
 import HostLayout from "./components/HostLayout"
 import Layout from "./components/Layout"
 import './index.css'
@@ -14,7 +15,7 @@ import Income from "./pages/Host/Income"
 import Reviews from "./pages/Host/Reviews"
 import NotFound from "./pages/NotFound"
 import VanDetail from "./pages/Vans/VanDetail"
-import Vans from "./pages/Vans/Vans"
+import Vans, { loader as vansLoader } from "./pages/Vans/Vans"
 import './server'
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
       path: '/', element: <Layout />, children: [
         { index: true, element: <Home /> },
         { path: 'about', element: <About /> },
-        { path: 'vans', element: <Vans /> },
+        { path: 'vans', element: <Vans />, loader: vansLoader, errorElement: <Error /> },
         { path: 'vans/:id', element: <VanDetail /> },
         {
           path: 'host', element: <HostLayout />, children: [

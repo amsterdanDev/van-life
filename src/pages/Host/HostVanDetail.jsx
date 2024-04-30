@@ -1,15 +1,8 @@
-import { useEffect, useState } from "react"
-import { useParams, Link, Outlet, NavLink } from "react-router-dom"
+import { Link, NavLink, Outlet, useLoaderData } from "react-router-dom"
+import { getHostVans } from "../../api"
 
 const HostVanDetail = () => {
-  const [van, setVan] = useState(null)
-  const { id } = useParams()
-
-  useEffect(() => {
-    fetch(`/api/host/vans/${id}`)
-      .then(res => res.json())
-      .then(data => setVan(data.vans))
-  }, [id])
+  const van = useLoaderData()
 
   const activeLink = ({ isActive }) => isActive ? 'active-link' : ''
 
@@ -47,4 +40,9 @@ const HostVanDetail = () => {
   )
 }
 
+function loader({ params }) {
+  return getHostVans(params.id)
+}
+
 export default HostVanDetail
+export { loader }

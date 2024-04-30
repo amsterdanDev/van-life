@@ -1,37 +1,33 @@
-import { useEffect, useState } from "react"
-import { Link, useLocation, useParams } from "react-router-dom"
+import { Link, useLoaderData, useLocation } from "react-router-dom"
+import { getVans } from "../../api"
 
 const VanDetail = () => {
-  const [van, setVan] = useState(null)
-  const { id } = useParams()
+  const { imageUrl, name, price, description, type } = useLoaderData()
   const { state } = useLocation()
-  
-  const search = state?.search || ''
-  const type = state?.type || 'all'
 
-  useEffect(() => {
-    fetch(`/api/vans/${id}`)
-      .then(res => res.json())
-      .then(data => setVan(data.vans))
-  }, [id])
+  const stateSearch = state?.search || ''
+  const stateType = state?.type || 'all'
 
   return (
     <div className="van-detail-container">
-      <Link to={`..${search}`} relative="path" className="back-button">
-        &larr; <span>Back to {type} vans</span>
+      <Link to={`..${stateSearch}`} relative="path" className="back-button">
+        &larr; <span>Back to {stateType} vans</span>
       </Link>
-      {van ? (
-        <div className="van-detail">
-          <img src={van.imageUrl} />
-          <i className={`van-type ${van.type} selected`}>{van.type}</i>
-          <h2>{van.name}</h2>
-          <p className="van-price"><span>${van.price}</span>/day</p>
-          <p>{van.description}</p>
-          <button className="link-button">Rent this van</button>
-        </div>
-      ) : <h2>Loading...</h2>}
+      <div className="van-detail">
+        <img src={imageUrl} />
+        <i className={`van-type ${type} selected`}>{type}</i>
+        <h2>{name}</h2>
+        <p className="van-price"><span>${price}</span>/day</p>
+        <p>{description}</p>
+        <button className="link-button">Rent this van</button>
+      </div>
     </div>
   )
 }
 
+function loader({ params }) {
+  return getVans(params.id)
+}
+
 export default VanDetail
+export { loader }

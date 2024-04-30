@@ -1,18 +1,13 @@
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLoaderData } from "react-router-dom"
+import { getHostVans } from "../../api"
+import { requireAuth } from "../../utils"
 
 const HostVans = () => {
-  const [vans, setVans] = useState(null)
-
-  useEffect(() => {
-    fetch('/api/host/vans')
-      .then(res => res.json())
-      .then(data => setVans(data.vans))
-  }, [])
+  const vans = useLoaderData()
 
   return (
     <div>
-      {vans ? vans.map(van => (
+      {vans.map(van => (
         <Link to={van.id} key={van.id} className="host-van-link-wrapper">
           <div className="host-van-single" key={van.id}>
             <img src={van.imageUrl} alt={`Photo of ${van.name}`} />
@@ -22,9 +17,17 @@ const HostVans = () => {
             </div>
           </div>
         </Link>
-      )) : <i>Loading...</i> }
+      ))}
     </div>
   )
 }
 
+async function loader() {
+  await requireAuth()
+  
+  return getHostVans()
+}
+
 export default HostVans
+export { loader }
+

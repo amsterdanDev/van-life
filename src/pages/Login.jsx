@@ -1,14 +1,27 @@
 import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { loginUser } from "../api";
 
 function Login() {
+  const navigate = useNavigate()
+  const [status, setStatus] = useState('idle')
+  const [error, setError] = useState(null)
   const [loginFormData, setLoginFormData] = useState({ email: "", password: "" })
   const message = useLoaderData()
-  console.log(message)
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    console.log(loginFormData)
+    setStatus('submitting')
+    setError(null)
+
+    try {
+      await loginUser(loginFormData)
+      navigate('/host', { replace: true })
+    } catch (error) {
+      setError(error)
+    }
+
+    setStatus('idle')
   }
 
   function handleChange(e) {
@@ -23,6 +36,7 @@ function Login() {
     <div className="login-container">
       <h1>Sign in to your account</h1>
       {message && <h2 style={{ 'color': 'red' }}>{message}</h2>}
+      {error && <h2 style={{ 'color': 'red' }}>{error.message}</h2>}
       <form onSubmit={handleSubmit} className="login-form">
         <input
           name="email"
@@ -38,7 +52,9 @@ function Login() {
           placeholder="Password"
           value={loginFormData.password}
         />
-        <button>Log in</button>
+        <button disabled={status === 'submitting'}>
+          {status === 'submitting' ? 'Logging in...' : 'Log in'}
+        </button>
       </form>
     </div>
   )

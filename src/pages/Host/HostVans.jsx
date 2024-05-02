@@ -22,8 +22,8 @@ const HostVans = () => {
   )
 }
 
-async function loader() {
-  await requireAuth()
+async function loader({ request }) {
+  await requireAuth(request)
   
   return getHostVans()
 }

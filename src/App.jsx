@@ -17,7 +17,7 @@ import NotFound from "./pages/NotFound"
 import VanDetail, { loader as vanDetailLoader } from "./pages/Vans/VanDetail"
 import Vans, { loader as vansLoader } from "./pages/Vans/Vans"
 import './server'
-import Login, { loader as loginLoader } from "./pages/Login"
+import Login, { loader as loginLoader, action as loginAction } from "./pages/Login"
 import { requireAuth } from "./utils"
 
 function App() {
@@ -27,22 +27,34 @@ function App() {
         { index: true, element: <Home /> },
         { path: 'about', element: <About /> },
         { path: 'vans', element: <Vans />, loader: vansLoader, errorElement: <Error /> },
-        { path: 'login', element: <Login />, loader: loginLoader },
+        { path: 'login', element: <Login />, loader: loginLoader, action: loginAction },
         { path: 'vans/:id', element: <VanDetail />, loader: vanDetailLoader },
         {
           path: 'host', element: <HostLayout />, children: [
-            { index: true, element: <Dashboard />, loader: async () => await requireAuth(), errorElement: <Error /> },
-            { path: 'income', element: <Income />, loader: async () => await requireAuth(), errorElement: <Error /> },
-            { path: 'reviews', element: <Reviews />, loader: async () => await requireAuth(), errorElement: <Error /> },
+            { 
+              index: true, 
+              element: <Dashboard />, 
+              loader: async ({ request }) => await requireAuth(request), 
+              errorElement: <Error /> },
+            { 
+              path: 'income', 
+              element: <Income />, 
+              loader: async ({ request }) => await requireAuth(request), 
+              errorElement: <Error /> },
+            { 
+              path: 'reviews', 
+              element: <Reviews />, 
+              loader: async ({ request }) => await requireAuth(request), 
+              errorElement: <Error /> },
             { path: 'vans', element: <HostVans />, loader: hostVansLoader },
             {
               path: 'vans/:id', 
               element: <HostVanDetail />, 
               loader: hostVanDetailLoader, 
               children: [
-                { index: true, element: <HostVanInfo /> },
-                { path: 'pricing', element: <HostVanPricing /> },
-                { path: 'photos', element: <HostVanPhoto /> }
+                { index: true, element: <HostVanInfo />, loader: async ({ request }) => requireAuth(request) },
+                { path: 'pricing', element: <HostVanPricing />, loader: async ({ request }) => requireAuth(request) },
+                { path: 'photos', element: <HostVanPhoto />, loader: async ({ request }) => requireAuth(request) }
               ]
             }
           ]

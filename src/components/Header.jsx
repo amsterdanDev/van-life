@@ -1,9 +1,13 @@
 import { Link, NavLink } from "react-router-dom"
 import avatar from '../assets/images/avatar-icon.png'
+import { useEffect } from "react"
 
 const Header = () => {
-
   const activeLink = ({ isActive }) => isActive ? 'active-link' : ''
+  
+  function fakeLogOut() {
+    localStorage.clear()
+  }
   
   return (
     <header>
@@ -15,6 +19,7 @@ const Header = () => {
         <Link to="login" className="login-link">
           <img src={avatar} className="login-icon" />
         </Link>
+        <button onClick={fakeLogOut}>X</button>
       </nav>
     </header>
   )
